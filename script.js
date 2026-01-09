@@ -594,7 +594,7 @@ window.addEventListener('load', () => {
     }, 500);
 });
 // ===== НАСТРОЙКИ TELEGRAM =====
-const TELEGRAM_BOT_TOKEN = '8573978609:AAH8zkE0tNxshqEG8D-k4KnXRjSoTSsDK2s';
+const TELEGRAM_BOT_TOKEN = '8573978609:AAEreVNtWGSHtu9beU67HJ7fx7atddb0zjI';
 const TELEGRAM_CHAT_ID = '8573978609';
 
 // ===== ФУНКЦИЯ ОТПРАВКИ В TELEGRAM =====
@@ -805,3 +805,4 @@ function showErrorMessage(message) {
     }, 5000);
 
 }
+
