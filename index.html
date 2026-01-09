@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Роман | Веб-разработчик нового поколения</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <meta name="description" content="Роман - веб-разработчик нового поколения. Создаю инновационные сайты с использованием AI. Быстро. Качественно. Современно.">
+</head>
+<body class="light-theme">
+    <style>
+    /* Динамический фон */
+    .bg-animation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        pointer-events: none;
+    }
+    
+    .bg-grid {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            linear-gradient(var(--grid-color) 1px, transparent 1px),
+            linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+        background-size: 50px 50px;
+        opacity: 0.1;
+    }
+    
+    .bg-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: var(--primary-color);
+        border-radius: 50%;
+        opacity: 0.2;
+    }
+    
+    /* Исправленный слайдер */
+    .budget-slider {
+        position: relative;
+        margin-top: 10px;
+    }
+    
+    .budget-slider input[type="range"] {
+        width: 100%;
+        height: 6px;
+        background: var(--bg-tertiary);
+        border-radius: 3px;
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+        cursor: pointer;
+    }
+    
+    .budget-slider input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: var(--gradient-primary);
+        border-radius: 50%;
+        cursor: pointer;
+        border: 3px solid var(--bg-card);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .budget-slider input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: var(--gradient-primary);
+        border-radius: 50%;
+        cursor: pointer;
+        border: 3px solid var(--bg-card);
+        box-shadow: var(--shadow-md);
+    }
+</style>
+
+<!-- Добавьте этот блок прямо после открывающего тега body -->
+<body class="light-theme">
+    <!-- Динамический фон -->
+    <div class="bg-animation">
+        <div class="bg-grid"></div>
+        <div class="bg-particles" id="bg-particles"></div>
+    </div>
+    
+    <!-- Остальной код остается без изменений -->
+    <!-- Тогглер темы -->
+    <div class="theme-toggle">
+        <button id="theme-toggle" class="theme-btn">
+            <i class="fas fa-moon"></i>
+            <span class="theme-text">Темная тема</span>
+        </button>
+    </div>
+
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <span class="logo-text">ROMAN</span>
+                <span class="logo-dot">.</span>
+                <span class="logo-tech">DEV</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#hero" class="nav-link active">Главная</a></li>
+                <li><a href="#about" class="nav-link">Обо мне</a></li>
+                <li><a href="#skills" class="nav-link">Навыки</a></li>
+                <li><a href="#portfolio" class="nav-link">Портфолио</a></li>
+                <li><a href="#contact" class="nav-link">Контакты</a></li>
+            </ul>
+            <button class="menu-toggle">
+                <span class="menu-line"></span>
+                <span class="menu-line"></span>
+                <span class="menu-line"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Герой секция -->
+    <section id="hero" class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <span class="badge-dot"></span>
+                        <span>Доступен для заказов</span>
+                    </div>
+                    <h1 class="hero-title">
+                        <span class="title-line">Создаю</span>
+                        <span class="title-line">инновационные</span>
+                        <span class="title-line highlight">веб-решения</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Веб-разработчик нового поколения. Соединяю креативность, 
+                        технологии и AI для создания уникальных цифровых продуктов.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#portfolio" class="btn btn-primary">
+                            <i class="fas fa-rocket"></i>
+                            <span>Смотреть работы</span>
+                        </a>
+                        <a href="#contact" class="btn btn-outline">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Начать проект</span>
+                        </a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="10">0</div>
+                            <div class="stat-label">Проектов</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="100">0</div>
+                            <div class="stat-label">% Качество</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="24">0</div>
+                            <div class="stat-label">/7 Доступность</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="visual-container">
+                        <div class="code-window">
+                            <div class="window-header">
+                                <span class="window-dot red"></span>
+                                <span class="window-dot yellow"></span>
+                                <span class="window-dot green"></span>
+                                <span class="window-title">roman.js</span>
+                            </div>
+                            <div class="window-content">
+                                <pre><code class="language-javascript">const roman = {
+                                    role: "Веб-разработчик",
+                                    stack: ["HTML5", "CSS3", "JavaScript"],
+                                    tools: ["AI ассистенты", "VS Code", "Figma"],
+                                    approach: "Инновационный",
+                                    availability: true
+};
+// Готов к вашему проекту
+await roman.createWebsite(yourRequirements);</code></pre>
+                            </div>
+                        </div>
+                        <div class="floating-elements">
+                            <div class="floating-element el1">
+                                <i class="fab fa-html5"></i>
+                            </div>
+                            <div class="floating-element el2">
+                                <i class="fab fa-css3-alt"></i>
+                            </div>
+                            <div class="floating-element el3">
+                                <i class="fab fa-js"></i>
+                            </div>
+                            <div class="floating-element el4">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция "Обо мне" -->
+    <section id="about" class="section about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Обо мне</h2>
+                <p class="section-subtitle">Разработчик, который говорит на языке будущего</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-card">
+                    <div class="card-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Скорость</h3>
+                    <p>Использую AI-инструменты для ускорения разработки без потери качества</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Чистый код</h3>
+                    <p>Пишу семантический, поддерживаемый код с лучшими практиками</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Инновации</h3>
+                    <p>Внедряю современные технологии и нестандартные решения</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Поддержка</h3>
+                    <p>Помогаю на всех этапах: от идеи до запуска и дальнейшего развития</p>
+                </div>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Почему выбирают меня?</h3>
+                    <p>Я не просто пишу код. Я создаю цифровые продукты, которые решают реальные задачи бизнеса. 
+                    Мой подход основан на глубоком анализе потребностей клиента и использовании самых современных инструментов разработки.</p>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Современный стек технологий</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>AI-ассистенты для оптимизации</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Адаптивный дизайн для всех устройств</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>SEO-оптимизация из коробки</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="image-frame">
+                        <img src="images/jq.jpg" alt="Роман - разработчик">
+                        <div class="image-badge">
+                            <i class="fas fa-code"></i>
+                            <span>В работе</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция "Навыки" -->
+    <section id="skills" class="section skills">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Технологии</h2>
+                <p class="section-subtitle">Современный стек для современных решений</p>
+            </div>
+            
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3 class="skill-category-title">
+                        <i class="fab fa-html5"></i>
+                        Фронтенд
+                    </h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">HTML5</span>
+                            <div class="skill-bar">
+                                <div class="skill-level" data-level="95"></div>
+                            </div>
+                            <span class="skill-percent">95%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">CSS3/SCSS</span>
+                            <div class="skill-bar">
+                                <div class="skill-level" data-level="90"></div>
+                            </div>
+                            <span class="skill-percent">90%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">JavaScript</span>
+                            <div class="skill-bar">
+                                <div class="skill-level" data-level="85"></div>
+                            </div>
+                            <span class="skill-percent">85%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3 class="skill-category-title">
+                        <i class="fas fa-tools"></i>
+                        Инструменты
+                    </h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">AI Ассистенты</span>
+                            <div class="skill-bar">
+                                <div class="skill-level" data-level="95"></div>
+                            </div>
+                            <span class="skill-percent">95%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Git & GitHub</span>
+                            <div class="skill-bar">
+                                <div class="skill-level" data-level="85"></div>
+                            </div>
+                            <span class="skill-percent">85%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Figma</span>
+                            <div class="skill-bar">
+                                <div class="skill-level" data-level="80"></div>
+                            </div>
+                            <span class="skill-percent">80%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3 class="skill-category-title">
+                        <i class="fas fa-rocket"></i>
+                        В разработке
+                    </h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">React</span>
+                            <div class="skill-bar">
+                                <div class="skill-level" data-level="70"></div>
+                            </div>
+                            <span class="skill-percent">70%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">TypeScript</span>
+                            <div class="skill-bar">
+                                <div class="skill-level" data-level="65"></div>
+                            </div>
+                            <span class="skill-percent">65%</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Next.js</span>
+                            <div class="skill-bar">
+                                <div class="skill-level" data-level="60"></div>
+                            </div>
+                            <span class="skill-percent">60%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция "Портфолио" -->
+    <section id="portfolio" class="section portfolio">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Мои работы</h2>
+                <p class="section-subtitle">Каждый проект — шаг к совершенству</p>
+            </div>
+            
+            <div class="portfolio-tabs">
+                <button class="tab-btn active" data-filter="all">Все проекты</button>
+                <button class="tab-btn" data-filter="landing">Лендинги</button>
+                <button class="tab-btn" data-filter="portfolio">Портфолио</button>
+                <button class="tab-btn" data-filter="other">Другие</button>
+            </div>
+            
+            <div class="portfolio-grid" id="portfolio-grid">
+                <!-- Проекты будут загружены через JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Модальное окно -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="modal">
+            <button class="modal-close" id="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-content" id="modal-content">
+                <!-- Контент будет заполнен через JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Секция "Контакты" -->
+    <section id="contact" class="section contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Давайте работать вместе</h2>
+                <p class="section-subtitle">Готов обсудить ваш проект в любое время</p>
+            </div>
+            
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>Свяжитесь со мной</h3>
+                    <p class="contact-description">
+                        Расскажите о вашей идее, и я создам сайт, который превзойдет ожидания
+                    </p>
+                    
+                    <div class="contact-cards">
+                        <a href="https://t.me/Zaya1437" target="_blank" class="contact-card">
+                            <div class="contact-icon telegram">
+                                <i class="fab fa-telegram"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Telegram</h4>
+                                <p>@Zaya1437</p>
+                            </div>
+                            <i class="fas fa-arrow-right contact-arrow"></i>
+                        </a>
+                        
+                        <a href="https://vk.com/p.glasses" target="_blank" class="contact-card">
+                            <div class="contact-icon vk">
+                                <i class="fab fa-vk"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>ВКонтакте</h4>
+                                <p>p.glasses</p>
+                            </div>
+                            <i class="fas fa-arrow-right contact-arrow"></i>
+                        </a>
+                        
+                        <a href="tel:+79207279140" class="contact-card">
+                            <div class="contact-icon phone">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Телефон</h4>
+                                <p>+7 (920) 727-91-40</p>
+                            </div>
+                            <i class="fas fa-arrow-right contact-arrow"></i>
+                        </a>
+                        
+                        <a href="mailto:romanrejs1@gmail.com" class="contact-card">
+                            <div class="contact-icon email">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Email</h4>
+                                <p>romanrejs1@gmail.com</p>
+                            </div>
+                            <i class="fas fa-arrow-right contact-arrow"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="contact-note">
+                        <i class="fas fa-clock"></i>
+                        <p>Отвечаю в течение 1 часа в рабочее время</p>
+                    </div>
+                </div>
+                
+                <form class="contact-form" id="contact-form">
+                    <h3>Отправить заявку</h3>
+                    
+                    <div class="form-group">
+                        <label for="name">Ваше имя *</label>
+                        <input type="text" id="name" placeholder="Как к вам обращаться?" required>
+                        <div class="error-message" id="name-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact">Email или телефон *</label>
+                        <input type="text" id="contact" placeholder="Для связи с вами" required>
+                        <div class="error-message" id="contact-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="project-type">Тип проекта *</label>
+                        <select id="project-type" required>
+                            <option value="" disabled selected>Выберите тип проекта</option>
+                            <option value="landing">Лендинг (одностраничник)</option>
+                            <option value="business-card">Сайт-визитка</option>
+                            <option value="portfolio">Портфолио</option>
+                            <option value="online-store">Интернет-магазин</option>
+                            <option value="other">Другое</option>
+                        </select>
+                        <div class="error-message" id="type-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="budget">Бюджет (руб.)</label>
+                        <div class="budget-slider">
+                            <input type="range" id="budget" min="5000" max="100000" step="5000" value="25000">
+                            <div class="budget-value">
+                                <span id="budget-display">25 000 ₽</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Опишите ваш проект *</label>
+                        <textarea id="message" rows="5" placeholder="Цели проекта, желаемый функционал, примеры..." required></textarea>
+                        <div class="error-message" id="message-error"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block btn-submit">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Отправить заявку</span>
+                        <div class="btn-loader"></div>
+                    </button>
+                    
+                    <div class="form-notice">
+                        <i class="fas fa-lock"></i>
+                        <span>Ваши данные защищены и не будут переданы третьим лицам</span>
+                    </div>
+                    
+                    <div class="success-message" id="success-message"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="#" class="logo">
+                        <span class="logo-text">ROMAN</span>
+                        <span class="logo-dot">.</span>
+                        <span class="logo-tech">DEV</span>
+                    </a>
+                    <p class="footer-tagline">Веб-разработка нового поколения</p>
+                    <div class="footer-social">
+                        <a href="https://t.me/Zaya1437" target="_blank" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="https://vk.com/p.glasses" target="_blank" class="social-link">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                        <a href="https://github.com/zaya1437" target="_blank" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Навигация</h4>
+                    <ul>
+                        <li><a href="#hero">Главная</a></li>
+                        <li><a href="#about">Обо мне</a></li>
+                        <li><a href="#skills">Навыки</a></li>
+                        <li><a href="#portfolio">Портфолио</a></li>
+                        <li><a href="#contact">Контакты</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-services">
+                    <h4>Услуги</h4>
+                    <ul>
+                        <li>Лендинги</li>
+                        <li>Сайты-визитки</li>
+                        <li>Интернет-магазины</li>
+                        <li>Портфолио</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Контакты</h4>
+                    <p><i class="fas fa-phone"></i> +7 (920) 727-91-40</p>
+                    <p><i class="fab fa-telegram"></i> @Zaya1437</p>
+                    <p><i class="fab fa-vk"></i> p.glasses</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Roman.DEV. Все права защищены.</p>
+                <p class="footer-note">
+                    <i class="fas fa-robot"></i>
+                    Сайт создан с использованием AI-ассистентов
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
