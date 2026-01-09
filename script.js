@@ -5,7 +5,7 @@ const projects = [
         title: "Развлечения",
         description: "Сайт показывающий интересы",
         tags: ["html", "css", "js", "animation"],
-        image: "images/screenshot_11.png",
+        image: "images/Screenshot_11.png",
         category: "other",
         demo: "https://zaya1437.github.io/love/",
         repo: "https://github.com/zaya1437/love",
@@ -803,4 +803,5 @@ function showErrorMessage(message) {
     setTimeout(() => {
         errorDiv.remove();
     }, 5000);
+
 }
