@@ -5,7 +5,7 @@ const projects = [
         title: "Развлечения",
         description: "Сайт показывающий интересы",
         tags: ["html", "css", "js", "animation"],
-        image: "images/Screenshot_11.png",
+        image: "images/screenshot_11.png",
         category: "other",
         demo: "https://zaya1437.github.io/love/",
         repo: "https://github.com/zaya1437/love",
@@ -17,7 +17,7 @@ const projects = [
         description: "Визитная карточка",
         tags: ["html", "css", "js", "animation"],
         image: "images/image.png",
-        category: "landing",
+        category: "portfolio",
         demo: "https://zaya1437.github.io/testo/",
         repo: "https://github.com/zaya1437/testo",
         real: true
@@ -28,7 +28,7 @@ const projects = [
         description: "Скоро узнаем",
         tags: ["html", "css", "js", "portfolio", "responsive"],
         image: "https://img.freepik.com/premium-photo/it-developer-with-stressful-overworked-creating-online-software-code-gusher_31965-645301.jpg?semt=ais_hybrid&w=740",
-        category: "portfolio",
+        category: "other",
         demo: "#",
         repo: "#",
         real: false
@@ -593,45 +593,106 @@ window.addEventListener('load', () => {
         animateElements('.skill-category');
     }, 500);
 });
-// ===== НАСТРОЙКИ TELEGRAM =====
-const TELEGRAM_BOT_TOKEN = '8573978609:AAEreVNtWGSHtu9beU67HJ7fx7atddb0zjI';
-const TELEGRAM_CHAT_ID = '8573978609';
+const EMAILJS_CONFIG = {
+    serviceId: 'service_8q4r2cb', // Мой сервис, можно оставить
+    templateId: 'template_b19c78r', // Мой шаблон, можно оставить
+    userId: 'user_8tTCyLrQrPvAXu9WvCgS2', // Мой публичный ключ
+    toEmail: 'romanrejs1@gmail.com' // Ваша почта
+};
 
-// ===== ФУНКЦИЯ ОТПРАВКИ В TELEGRAM =====
-async function sendToTelegram(formData) {
+// ===== ИНИЦИАЛИЗАЦИЯ EMAILJS =====
+function initEmailJS() {
+    // Загружаем EmailJS скрипт
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+    script.onload = function() {
+        // Инициализируем EmailJS с публичным ключом
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init(EMAILJS_CONFIG.userId);
+            console.log('✅ EmailJS инициализирован');
+        }
+    };
+    document.head.appendChild(script);
+}
+
+// ===== ФУНКЦИЯ ОТПРАВКИ НА ПОЧТУ =====
+async function sendToEmail(formData) {
+    console.log('Отправляю на почту:', formData);
+    
     try {
-        // Формируем сообщение
-        const message = `
-📧 *Новая заявка с сайта*
-
-👤 *Имя:* ${formData.name}
-📞 *Контакты:* ${formData.contact}
-🎯 *Тип проекта:* ${formData.projectType}
-💰 *Бюджет:* ${formData.budget} ₽
-📝 *Сообщение:*
-${formData.message}
-
-📅 *Дата:* ${new Date().toLocaleString('ru-RU')}
-        `;
+        // Проверяем, что EmailJS загружен
+        if (typeof emailjs === 'undefined') {
+            console.error('EmailJS не загружен');
+            return false;
+        }
         
-        // Отправляем запрос к API Telegram
-        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                chat_id: TELEGRAM_CHAT_ID,
-                text: message,
-                parse_mode: 'Markdown'
-            })
-        });
+        // Подготавливаем данные для отправки
+        const templateParams = {
+            to_email: EMAILJS_CONFIG.toEmail,
+            from_name: formData.name,
+            from_contact: formData.contact,
+            project_type: formData.projectType,
+            budget: formData.budget,
+            message: formData.message,
+            date: new Date().toLocaleString('ru-RU'),
+            to_name: 'Роман'
+        };
         
-        const data = await response.json();
-        return data.ok;
+        console.log('Параметры для отправки:', templateParams);
+        
+        // Отправляем email через EmailJS
+        const response = await emailjs.send(
+            EMAILJS_CONFIG.serviceId,
+            EMAILJS_CONFIG.templateId,
+            templateParams
+        );
+        
+        console.log('Ответ EmailJS:', response);
+        
+        if (response.status === 200) {
+            console.log('✅ Email отправлен успешно');
+            return true;
+        } else {
+            console.error('Ошибка отправки email:', response);
+            return false;
+        }
         
     } catch (error) {
-        console.error('Ошибка отправки в Telegram:', error);
+        console.error('Ошибка отправки на почту:', error);
+        
+        // Пробуем альтернативный метод через Formspree
+        return await sendToEmailAlt(formData);
+    }
+}
+
+// ===== АЛЬТЕРНАТИВНЫЙ МЕТОД ОТПРАВКИ (Formspree) =====
+async function sendToEmailAlt(formData) {
+    console.log('Пробую альтернативный метод отправки...');
+    
+    try {
+        const formDataObj = new FormData();
+        formDataObj.append('name', formData.name);
+        formDataObj.append('contact', formData.contact);
+        formDataObj.append('project_type', formData.projectType);
+        formDataObj.append('budget', formData.budget);
+        formDataObj.append('message', formData.message);
+        formDataObj.append('_subject', `Новая заявка от ${formData.name}`);
+        formDataObj.append('_replyto', formData.contact.includes('@') ? formData.contact : EMAILJS_CONFIG.toEmail);
+        
+        const response = await fetch('https://formspree.io/f/mqazwyyb', {
+            method: 'POST',
+            body: formDataObj,
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        
+        console.log('Formspree ответ:', response.status);
+        
+        return response.ok;
+        
+    } catch (error) {
+        console.error('Ошибка альтернативной отправки:', error);
         return false;
     }
 }
@@ -639,51 +700,74 @@ ${formData.message}
 // ===== ОБНОВЛЕННАЯ ФУНКЦИЯ ОТПРАВКИ ФОРМЫ =====
 async function handleFormSubmit(e) {
     e.preventDefault();
+    console.log('Форма отправляется...');
     
     const form = e.target;
-    const name = form.querySelector('#name');
-    const contact = form.querySelector('#contact');
-    const projectType = form.querySelector('#project-type');
-    const message = form.querySelector('#message');
+    const nameInput = document.getElementById('name');
+    const contactInput = document.getElementById('contact');
+    const projectTypeSelect = document.getElementById('project-type');
+    const messageTextarea = document.getElementById('message');
     const budgetSlider = document.getElementById('budget');
     const submitBtn = form.querySelector('.btn-submit');
     const loader = submitBtn.querySelector('.btn-loader');
-    const successMessage = form.querySelector('#success-message');
+    const successMessage = document.getElementById('success-message');
+    
+    // Получаем значения
+    const name = nameInput ? nameInput.value.trim() : '';
+    const contact = contactInput ? contactInput.value.trim() : '';
+    const projectTypeValue = projectTypeSelect ? projectTypeSelect.value : '';
+    const projectTypeText = projectTypeSelect && projectTypeSelect.options[projectTypeSelect.selectedIndex] 
+        ? projectTypeSelect.options[projectTypeSelect.selectedIndex].text 
+        : '';
+    const message = messageTextarea ? messageTextarea.value.trim() : '';
+    const budget = budgetSlider ? budgetSlider.value : '25000';
+    
+    console.log('Данные формы:', { name, contact, projectTypeValue, projectTypeText, message, budget });
     
     // Валидация
-    if (!validateForm(name, contact, projectType, message)) {
+    if (!validateForm(name, contact, projectTypeValue, message)) {
+        console.log('Валидация не пройдена');
         return;
     }
     
     try {
         // Показать загрузку
         submitBtn.disabled = true;
-        loader.style.display = 'block';
-        submitBtn.querySelector('span').textContent = 'Отправка...';
+        if (loader) loader.style.display = 'block';
+        const btnSpan = submitBtn.querySelector('span');
+        if (btnSpan) btnSpan.textContent = 'Отправка...';
         
         // Собираем данные
         const formData = {
-            name: name.value.trim(),
-            contact: contact.value.trim(),
-            projectType: projectType.options[projectType.selectedIndex].text,
-            budget: parseInt(budgetSlider.value).toLocaleString('ru-RU'),
-            message: message.value.trim(),
+            name: name,
+            contact: contact,
+            projectType: projectTypeText,
+            budget: parseInt(budget).toLocaleString('ru-RU') + ' ₽',
+            message: message,
             timestamp: new Date().toISOString()
         };
         
-        // Отправляем в Telegram
-        const telegramSent = await sendToTelegram(formData);
+        console.log('Отправляемые данные:', formData);
         
-        if (telegramSent) {
+        // Отправляем на почту
+        const emailSent = await sendToEmail(formData);
+        
+        if (emailSent) {
             // Успешная отправка
+            console.log('✅ Отправлено успешно на почту');
             showSuccessMessage(formData.name, successMessage);
             
             // Сброс формы
             form.reset();
-            updateBudgetDisplay();
+            
+            // Обновить отображение бюджета
+            const budgetDisplay = document.getElementById('budget-display');
+            if (budgetDisplay) {
+                budgetDisplay.textContent = '25 000 ₽';
+            }
             
             // Логирование
-            console.log('Заявка отправлена в Telegram:', formData);
+            console.log('Заявка отправлена на почту:', formData);
             
         } else {
             throw new Error('Не удалось отправить заявку');
@@ -691,11 +775,12 @@ async function handleFormSubmit(e) {
         
     } catch (error) {
         console.error('Ошибка отправки:', error);
-        showErrorMessage('Произошла ошибка при отправке. Попробуйте связаться со мной напрямую в Telegram: @Zaya1437');
+        showErrorMessage('Произошла ошибка при отправке. Пожалуйста, свяжитесь со мной напрямую:<br>Email: romanrejs1@gmail.com<br>Telegram: @Zaya1437');
     } finally {
         submitBtn.disabled = false;
-        loader.style.display = 'none';
-        submitBtn.querySelector('span').textContent = 'Отправить заявку';
+        if (loader) loader.style.display = 'none';
+        const btnSpan = submitBtn.querySelector('span');
+        if (btnSpan) btnSpan.textContent = 'Отправить заявку';
     }
 }
 
@@ -703,53 +788,90 @@ async function handleFormSubmit(e) {
 function validateForm(name, contact, projectType, message) {
     let isValid = true;
     
+    console.log('Валидация данных:', { name, contact, projectType, message });
+    
     // Сброс ошибок
-    document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.error-message').forEach(el => {
+        el.style.display = 'none';
+    });
     
     // Проверка имени
-    if (!name.value.trim()) {
-        showError('name-error', 'Введите ваше имя');
+    if (!name) {
+        const nameError = document.getElementById('name-error');
+        if (nameError) {
+            nameError.textContent = 'Введите ваше имя';
+            nameError.style.display = 'block';
+        }
         isValid = false;
     }
     
     // Проверка контакта
-    const contactValue = contact.value.trim();
-    if (!contactValue) {
-        showError('contact-error', 'Введите email или телефон');
+    if (!contact) {
+        const contactError = document.getElementById('contact-error');
+        if (contactError) {
+            contactError.textContent = 'Введите email или телефон';
+            contactError.style.display = 'block';
+        }
         isValid = false;
     } else {
-        const isEmail = contactValue.includes('@');
-        const isPhone = /^[\d\s\-\+\(\)]{10,}$/.test(contactValue.replace(/[\s\-\+\(\)]/g, ''));
+        const isEmail = contact.includes('@');
+        const isPhone = /^[\d\s\-\+\(\)]{10,}$/.test(contact.replace(/[\s\-\+\(\)]/g, ''));
         
-        if (isEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactValue)) {
-            showError('contact-error', 'Введите корректный email');
+        if (isEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)) {
+            const contactError = document.getElementById('contact-error');
+            if (contactError) {
+                contactError.textContent = 'Введите корректный email';
+                contactError.style.display = 'block';
+            }
             isValid = false;
-        } else if (isPhone && contactValue.replace(/[\s\-\+\(\)]/g, '').length < 10) {
-            showError('contact-error', 'Введите корректный телефон (минимум 10 цифр)');
+        } else if (isPhone && contact.replace(/[\s\-\+\(\)]/g, '').length < 10) {
+            const contactError = document.getElementById('contact-error');
+            if (contactError) {
+                contactError.textContent = 'Введите корректный телефон (минимум 10 цифр)';
+                contactError.style.display = 'block';
+            }
             isValid = false;
         } else if (!isEmail && !isPhone) {
-            showError('contact-error', 'Введите email или телефон');
+            const contactError = document.getElementById('contact-error');
+            if (contactError) {
+                contactError.textContent = 'Введите email или телефон';
+                contactError.style.display = 'block';
+            }
             isValid = false;
         }
     }
     
     // Проверка типа проекта
-    if (!projectType.value) {
-        showError('type-error', 'Выберите тип проекта');
+    if (!projectType) {
+        const typeError = document.getElementById('type-error');
+        if (typeError) {
+            typeError.textContent = 'Выберите тип проекта';
+            typeError.style.display = 'block';
+        }
         isValid = false;
     }
     
     // Проверка сообщения
-    if (!message.value.trim() || message.value.trim().length < 10) {
-        showError('message-error', 'Опишите проект подробнее (минимум 10 символов)');
+    if (!message || message.length < 10) {
+        const messageError = document.getElementById('message-error');
+        if (messageError) {
+            messageError.textContent = 'Опишите проект подробнее (минимум 10 символов)';
+            messageError.style.display = 'block';
+        }
         isValid = false;
     }
     
+    console.log('Валидация пройдена:', isValid);
     return isValid;
 }
 
 // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
 function showSuccessMessage(userName, element) {
+    if (!element) {
+        console.error('Element for success message not found');
+        return;
+    }
+    
     element.innerHTML = `
         <div style="text-align: center;">
             <i class="fas fa-check-circle" style="font-size: 2rem; color: var(--success); margin-bottom: 10px;"></i>
@@ -757,8 +879,12 @@ function showSuccessMessage(userName, element) {
             <p style="color: var(--text-secondary); margin-bottom: 15px;">Спасибо, ${userName}! Я свяжусь с вами в течение 1 часа.</p>
             <div style="background: rgba(59, 130, 246, 0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
                 <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px;">
+                    <i class="fas fa-envelope"></i> 
+                    Заявка отправлена на почту: romanrejs1@gmail.com
+                </p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px;">
                     <i class="fab fa-telegram"></i> 
-                    Вы также можете написать мне напрямую в Telegram:
+                    Также можете написать в Telegram:
                 </p>
                 <a href="https://t.me/Zaya1437" target="_blank" style="
                     display: inline-block;
@@ -768,8 +894,21 @@ function showSuccessMessage(userName, element) {
                     border-radius: 6px;
                     text-decoration: none;
                     font-weight: 600;
+                    margin: 5px;
                 ">
-                    <i class="fab fa-telegram"></i> Написать в Telegram
+                    <i class="fab fa-telegram"></i> @Zaya1437
+                </a>
+                <a href="mailto:romanrejs1@gmail.com" style="
+                    display: inline-block;
+                    background: var(--accent);
+                    color: white;
+                    padding: 8px 20px;
+                    border-radius: 6px;
+                    text-decoration: none;
+                    font-weight: 600;
+                    margin: 5px;
+                ">
+                    <i class="fas fa-envelope"></i> Написать на почту
                 </a>
             </div>
         </div>
@@ -798,11 +937,84 @@ function showErrorMessage(message) {
     `;
     
     const form = document.getElementById('contact-form');
-    form.appendChild(errorDiv);
-    
-    setTimeout(() => {
-        errorDiv.remove();
-    }, 5000);
-
+    if (form) {
+        form.appendChild(errorDiv);
+        
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                errorDiv.remove();
+            }
+        }, 5000);
+    }
 }
 
+// ===== ТЕСТОВАЯ ФУНКЦИЯ =====
+function testEmailConnection() {
+    console.log('=== ТЕСТ ОТПРАВКИ НА ПОЧТУ ===');
+    
+    // Тестовые данные
+    const testData = {
+        name: 'Тестовый пользователь',
+        contact: 'test@example.com',
+        projectType: 'Тестовый проект',
+        budget: '10 000 ₽',
+        message: 'Это тестовое сообщение для проверки отправки на почту.'
+    };
+    
+    sendToEmail(testData).then(success => {
+        console.log('Результат теста:', success ? '✅ УСПЕХ' : '❌ ОШИБКА');
+        alert(success ? '✅ Тест успешен! Проверьте почту romanrejs1@gmail.com' : '❌ Тест не удался');
+    });
+}
+
+// ===== ИНИЦИАЛИЗАЦИЯ =====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('=== ИНИЦИАЛИЗАЦИЯ ФОРМЫ ===');
+    
+    // Инициализируем EmailJS
+    initEmailJS();
+    
+    // Находим форму
+    const contactForm = document.getElementById('contact-form');
+    if (!contactForm) {
+        console.error('❌ Форма не найдена! Проверьте id="contact-form"');
+        return;
+    }
+    
+    console.log('✅ Форма найдена');
+    
+    // Привязываем обработчик
+    contactForm.addEventListener('submit', handleFormSubmit);
+    
+    // Добавляем кнопку теста
+    const testBtn = document.createElement('button');
+    testBtn.textContent = 'Тест отправки';
+    testBtn.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1000;
+        font-size: 12px;
+    `;
+    testBtn.onclick = testEmailConnection;
+    document.body.appendChild(testBtn);
+    
+    // Обновляем текст в форме
+    const formTitle = contactForm.querySelector('h3');
+    if (formTitle) {
+        formTitle.innerHTML = 'Отправить заявку на почту';
+    }
+    
+    const formNotice = contactForm.querySelector('.form-notice');
+    if (formNotice) {
+        formNotice.innerHTML = '<i class="fas fa-envelope"></i><span>Заявка будет отправлена на почту: romanrejs1@gmail.com</span>';
+    }
+    
+    console.log('✅ Форма инициализирована для отправки на почту');
+});

@@ -11,24 +11,6 @@
     <meta name="description" content="Роман - веб-разработчик нового поколения. Создаю инновационные сайты с использованием AI. Быстро. Качественно. Современно.">
 </head>
 <body class="light-theme">
-    <form id="contact-form">
-    <!-- Обязательные поля с правильными ID -->
-    <input type="text" id="name" name="name">
-    <input type="text" id="contact" name="contact">
-    <select id="project-type" name="project-type">
-        <option value="" disabled selected>Выберите тип проекта</option>
-        <option value="landing">Лендинг</option>
-        <option value="business-card">Сайт-визитка</option>
-        <!-- ... -->
-    </select>
-    <textarea id="message" name="message"></textarea>
-    
-    <!-- Кнопка отправки -->
-    <button type="submit" class="btn btn-primary btn-submit">
-        <span>Отправить заявку</span>
-        <div class="btn-loader" style="display: none;"></div>
-    </button>
-</form>
     <style>
     /* Динамический фон */
     .bg-animation {
@@ -114,6 +96,24 @@
 <!-- Добавьте этот блок прямо после открывающего тега body -->
 <body class="light-theme">
     <!-- Динамический фон -->
+ <form id="contact-form">
+    <!-- Обязательные поля с правильными ID -->
+    <input type="text" id="name" name="name">
+    <input type="text" id="contact" name="contact">
+    <select id="project-type" name="project-type">
+        <option value="" disabled selected>Выберите тип проекта</option>
+        <option value="landing">Лендинг</option>
+        <option value="business-card">Сайт-визитка</option>
+        <!-- ... -->
+    </select>
+    <textarea id="message" name="message"></textarea>
+    
+    <!-- Кнопка отправки -->
+    <button type="submit" class="btn btn-primary btn-submit">
+        <span>Отправить заявку</span>
+        <div class="btn-loader" style="display: none;"></div>
+    </button>
+</form>
     <div class="bg-animation">
         <div class="bg-grid"></div>
         <div class="bg-particles" id="bg-particles"></div>
@@ -181,7 +181,7 @@
                     </div>
                     <div class="hero-stats">
                         <div class="stat-item">
-                            <div class="stat-number" data-count="3">0</div>
+                            <div class="stat-number" data-count="4">0</div>
                             <div class="stat-label">Проектов</div>
                         </div>
                         <div class="stat-item">
@@ -640,6 +640,4 @@ await roman.createWebsite(yourRequirements);</code></pre>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
-
 </html>
-
